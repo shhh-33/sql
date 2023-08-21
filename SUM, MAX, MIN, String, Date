@@ -1,22 +1,15 @@
-### **가격이 제일 비싼 식품의 정보 출력하기**
+--가격이 제일 비싼 식품의 정보 출력하기
 
-<오답>
-
-```sql
+--<오답>
 SELECT PRODUCT_ID, PRODUCT_NAME, PRODUCT_CD, CATEGORY, MAX(PRICE) PRICE
 FROM FOOD_PRODUCT
 GROUP BY PRODUCT_ID, PRODUCT_NAME, PRODUCT_CD, CATEGORY
-```
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7c7e10e8-e422-4c0c-988b-e02401550956/Untitled.png)
+--만약 max 값이 같은 제품이 여러개인 경우 max()는 해당하는 모든 제품들을 다 보여주는데 limit을 이용하면 가장 큰 하나 밖에 안보여줍니다.
 
-만약 max 값이 같은 제품이 여러개인 경우 max()는 해당하는 모든 제품들을 다 보여주는데 limit을 이용하면 가장 큰 하나 밖에 안보여줍니다.
+--<정답>
 
-<정답>
-
-1.ROWNUM 활용
-
-```sql
+--1.ROWNUM 활용
 SELECT *
 FROM (
     SELECT *
@@ -24,40 +17,26 @@ FROM (
     ORDER BY PRICE DESC
 )
 WHERE ROWNUM = 1;
-```
 
-2.서브쿼리 활용
 
-```sql
+--2.서브쿼리 활용
 SELECT *
 FROM FOOD_PRODUCT
 WHERE PRICE = (SELECT MAX(PRICE) FROM FOOD_PRODUCT);
-```
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/bf97d5f8-00f2-45dc-83fa-85a757689cd0/Untitled.png)
+--가장 비싼 상품 구하기
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0d7606c6-8bff-4bdd-a315-86346487bee6/Untitled.png)
-
-### **가장 비싼 상품 구하기**
-
-```sql
 SELECT MAX(PRICE) MAX_PRICE
 FROM PRODUCT
-```
 
-### **최솟값 구하기**
 
-<오답>
-
-**`ROWNUM`**은 정렬되기 이전에 부여되기 때문에 정렬과는 무관하게 첫 번째 행만 선택됩니다.
-
-```sql
+--최솟값 구하기
+--<오답>
+--**`ROWNUM`**은 정렬되기 이전에 부여되기 때문에 정렬과는 무관하게 첫 번째 행만 선택됩니다.
 SELECT DATETIME FROM ANIMAL_INS  WHERE ROWNUM = 1 ORDER BY DATETIME DESC
-```
 
-가장 최근 데이터의 날짜를 선택하는 결과
 
-```sql
+--가장 최근 데이터의 날짜를 선택하는 결과
 SELECT DATETIME
 FROM (
     SELECT DATETIME
@@ -65,37 +44,26 @@ FROM (
     ORDER BY DATETIME DESC
 ) SUB
 WHERE ROWNUM = 1;
-```
 
-<정답>
 
-1.FETCH FIRST 1 ROWS ONLY  
-
-```sql
+--<정답>
+--1.FETCH FIRST 1 ROWS ONLY  
 SELECT DATETIME
 FROM ANIMAL_INS
 ORDER BY DATETIME
 FETCH FIRST 1 ROWS ONLY; —가장 초기 데이터 선택
-```
 
-2.MIN
-
-```sql
+--2.MIN
 SELECT DATETIME
 FROM ANIMAL_INS
 WHERE DATETIME = (SELECT MIN(DATETIME) FROM ANIMAL_INS );
-```
 
-### 동물 수 구하기
 
-```sql
+--동물 수 구하기
 SELECT COUNT(*) COUNT FROM ANIMAL_INS --테이블 행 갯수 셈
-```
 
-### 중복 제거하기
 
-```sql
+--중복 제거하기
 SELECT COUNT(DISTINCT NAME) AS COUNT --중복제거후 행수세기
 FROM ANIMAL_INS 
 WHERE NAME IS NOT NULL
-```
