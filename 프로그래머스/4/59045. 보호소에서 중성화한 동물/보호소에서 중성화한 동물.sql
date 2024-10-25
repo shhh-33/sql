@@ -1,0 +1,22 @@
+/*
+보호소에 들어올 당시에는 중성화되지 않았지만, 보호소를 나갈 당시에는 중성화
+ANIMAL_INS A
+ANIMAL_OUTS B
+
+SEX_UPON_INTAKE = Spayed 이미 중성화, Intact 되지않음
+SEX_UPON_INTAKE = Neutered 중성화
+
+ANIMAL_ID, ANIMAL_TYPE, NAME
+*/
+
+SELECT A.ANIMAL_ID, A.ANIMAL_TYPE, A.NAME 
+FROM ANIMAL_INS A
+    INNER JOIN (
+        SELECT ANIMAL_ID, ANIMAL_TYPE, NAME 
+            FROM ANIMAL_OUTS
+        WHERE SEX_UPON_OUTCOME LIKE '%Neutered%' OR SEX_UPON_OUTCOME LIKE '%Spayed%'
+        ) B ON A.ANIMAL_ID = B.ANIMAL_ID
+WHERE A.SEX_UPON_INTAKE LIKE '%Intact%'
+ORDER BY A.ANIMAL_ID
+
+    
