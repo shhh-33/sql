@@ -1,6 +1,17 @@
-SELECT ORDER_ID
-, PRODUCT_ID
-, TO_CHAR(OUT_DATE, 'YYYY-MM-DD') AS OUT_DATE
+/*
+ 2022년 5월 1일을 기준으로
+ 출고여부는 2022년 5월 1일까지 출고완료로 이 후 날짜는 출고 대기로 미정이면 출고미정으로 출력해주시고, 
+ 주문 ID를 기준으로 오름차순 정렬해주세요.
+
+SELECT ORDER_ID, PRODUCT_ID, TO_CHAR(OUT_DATE, 'YYYY-MM-DD') OUT_DATE,
+CASE WHEN TO_CHAR(OUT_DATE, 'YYYY-MM-DD') <= '2020-05-01' THEN '출고완료'
+     WHEN TO_CHAR(OUT_DATE, 'YYYY-MM-DD') >  '2022-05-01' THEN '출고대기'
+     ELSE '출고미정' END
+AS "출고여부"
+FROM FOOD_ORDER
+ORDER BY ORDER_ID;*/
+
+SELECT ORDER_ID, PRODUCT_ID, TO_CHAR(OUT_DATE, 'YYYY-MM-DD') AS OUT_DATE
 , CASE WHEN TO_CHAR(OUT_DATE, 'YYYY-MM-DD') <= '2022-05-01'  THEN '출고완료'
        WHEN TO_CHAR(OUT_DATE, 'YYYY-MM-DD') >  '2022-05-01'  THEN '출고대기'
        ELSE '출고미정'
